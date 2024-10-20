@@ -39,8 +39,6 @@ build_and_push_image() {
     fi
 }
 
-# Check if Docker login is required
-check_docker_login
 
 # Services and versions
 declare -A services=( 
