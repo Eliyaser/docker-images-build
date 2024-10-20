@@ -14,7 +14,10 @@ sudo git clone https://github.com/sloopstash/kickstart-docker.git kickstart-dock
 
     stage('Build and Push') {
       steps {
-        sh '''# Function to build and push a Docker image
+        sh '''# Switch to the Docker starter-kit directory
+cd /opt/kickstart-docker || { echo "Directory /opt/kickstart-docker not found. Exiting."; exit 1; }
+
+# Function to build and push a Docker image
 build_and_push_image() {
     local service=$1
     local version=$2
