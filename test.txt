@@ -8,12 +8,14 @@ pipeline {
         sudo rm -rf docker-images-build
         sudo git clone https://github.com/sloopstash/kickstart-docker.git kickstart-docker
         sudo git clone https://github.com/Eliyaser/docker-images-build.git kickstart-docker
+        sudo chown -R $USER kickstart-docker
+        sudo chown -R $USER docker-images-build
         '''
       }
     }
     stage('Build and Push') {
      sh '''
-      cd /opt/docker-images-build
+      cd docker-images-build
       sudo chmod +x script.sh
       ./script.sh'''
     }
