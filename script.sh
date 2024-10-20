@@ -49,8 +49,6 @@ check_docker_login
 # Services and versions
 declare -A services=( 
     ["redis"]="4.0.9" 
-    ["python"]="2.7" 
-    ["nginx"]="1.14.0" 
 )
 
 # Loop through services and build and push each Docker image

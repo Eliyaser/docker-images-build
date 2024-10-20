@@ -1,86 +1,22 @@
 pipeline {
-    agent any
-
-    environment {
-        DOCKER_CREDENTIALS_ID = 'your-docker-credentials-id'  // Add your Jenkins Docker Hub credentials ID here
-        DOCKER_USERNAME = 'your-dockerhub-username'           // Docker Hub username
-        DOCKER_REGISTRY = 'https://index.docker.io/v1/'       // Docker registry URL
-    }
-
-    stages {
-        stage('CI: Download sources') {
+  agent any
+  stages {
+    stage('Download sources') {
       steps {
-        sh '''rm -rf kickstart-docker
-            rm -rf kickstart-ansible
-            git clone https://github.com/sloopstash/kickstart-docker.git kickstart-docker'''
+        sh '''
+        sudo rm -rf kickstart-docker
+        sudo rm -rf docker-images-build
+        sudo git clone https://github.com/sloopstash/kickstart-docker.git kickstart-docker
+        sudo git clone https://github.com/Eliyaser/docker-images-build.git kickstart-docker
+        '''
       }
     }
-
-        stage('Build and Push Docker Images') {
-            steps {
-                script {
-                    // Define services and versions in a map
-                    def services = [
-                        'redis': '4.0.9',
-                        'python': '2.7',
-                        'nginx': '1.14.0'
-                    ]
-
-                    // Check if Docker is logged in, otherwise login with Jenkins credentials
-                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh '''
-                        if ! docker info | grep -q "Username:"; then
-                            echo "You are not logged in to Docker Hub. Logging in..."
-                            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                            if [ $? -ne 0 ]; then
-                                echo "Docker login failed. Exiting."
-                                exit 1
-                            fi
-                        else
-                            echo "You are already logged in to Docker Hub."
-                        fi
-                        '''
-                    }
-
-                    // Build and push each Docker image
-                    services.each { service, version ->
-                        def imageName = "sloopstash/${service}:v${version}"
-                        def dockerfilePath = "image/${service}/${version}/amazon-linux-2.dockerfile"
-                        def contextPath = "image/${service}/${version}/context"
-                        
-                        sh """
-                        echo "Building Docker image: ${imageName}"
-                        docker build -t ${imageName} -f ${dockerfilePath} ${contextPath}
-                        if [ $? -ne 0 ]; then
-                            echo "Failed to build Docker image: ${imageName}. Exiting."
-                            exit 1
-                        fi
-
-                        echo "Pushing Docker image: ${imageName} to Docker Hub"
-                        docker push ${imageName}
-                        if [ $? -ne 0 ]; then
-                            echo "Failed to push Docker image: ${imageName}. Exiting."
-                            exit 1
-                        fi
-                        """
-                    }
-                }
-            }
-        }
+    stage('Build and Push') {
+     sh '''
+      cd /opt/docker-images-build
+      sudo chmod +x script.sh
+      ./script.sh'''
     }
 
-    post {
-        always {
-            echo 'Cleaning up Docker images...'
-            sh 'docker image prune -f'
-        }
-
-        success {
-            echo 'All Docker images have been built and pushed successfully!'
-        }
-
-        failure {
-            echo 'Build or push failed.'
-        }
-    }
+  }
 }
