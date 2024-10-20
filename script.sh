@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Switch to the Docker starter-kit directory
-cd /opt/kickstart-docker || { echo "Directory /opt/kickstart-docker not found. Exiting."; exit 1; }
+cd kickstart-docker || { echo "Directory /opt/kickstart-docker not found. Exiting."; exit 1; }
 
 # Function to check Docker login status
 check_docker_login() {
