@@ -14,7 +14,7 @@ sudo git clone https://github.com/sloopstash/kickstart-docker.git kickstart-dock
 
     stage('Docker Hub login Check') {
       steps {
-        sh '''if ! sudo docker info | grep -q "Username:"; then
+        sh '''if ! sudo docker info | grep -i "Username:"; then
     echo "Error: You are not logged in to Docker Hub."
     echo "Please log in to Docker Hub first."
     exit 1
