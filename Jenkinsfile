@@ -18,7 +18,7 @@ sudo git clone https://github.com/sloopstash/kickstart-docker.git kickstart-dock
       steps {
         sh '''cd docker-images-build
 sudo chmod +x script.sh
-./script.sh'''
+'''
         echo 'All Docker images have been built and pushed successfully!'
       }
     }
