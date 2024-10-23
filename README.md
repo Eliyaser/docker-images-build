@@ -5,6 +5,10 @@ This pipeline automates the process of building Docker images for multiple servi
 ## Steps:
 
 #### 1. Create Docker Hub Credentials in Jenkins:
+run command to you docker running machine
+```
+sudo usermod -a -G docker jenkins
+```
 Go to Jenkins Dashboard > Manage Jenkins > Manage Credentials.
 Add usernamePassword credentials:
 ID: dockerHub123
