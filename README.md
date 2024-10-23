@@ -8,6 +8,8 @@ This pipeline automates the process of building Docker images for multiple servi
 run command to you docker running machine
 ```
 sudo usermod -a -G docker jenkins
+
+sudo systemctl restart jenkins
 ```
 Go to Jenkins Dashboard > Manage Jenkins > Manage Credentials.
 Add usernamePassword credentials:
