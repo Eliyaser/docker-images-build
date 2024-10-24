@@ -17,8 +17,8 @@ ID: dockerHub123
 Username: <your-docker-hub-username>
 Password: <your-docker-hub-password>.
 
-need to insatll following plugins
-1.Docker Pipeline plugin
+#### need to insatll following plugins
+--1.Docker Pipeline plugin
 
 #### 2. Modify 
 Update the services array in script.sh to include all required services and their versions. Example:
